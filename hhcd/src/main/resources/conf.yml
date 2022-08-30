@@ -1,0 +1,147 @@
+#项目自定义配置文件
+project:
+  name: wms3.0
+  is-init: false
+#用户相关配置
+user:
+  #单点登录开关
+  singlesignon: true
+  admin:
+    white-ip:
+      - 192.168.1.*
+      - 192.168.55.*
+
+  #默认密码
+  passwd:
+    default: suray123.
+    expiration: 9999999
+    expiration-remind: 10
+    expiration-is-open: true
+#出库单相关
+#outorder:
+#  #合并时间 单位 小时
+#  mergehours: 3
+#  #默认出库口
+#  default-door: A-0001
+
+#文档相关
+#document:
+#  #文档根目录
+#  path: '/usr/local/data/systemfile/filesystem'
+#
+#  dbfilepath: '/usr/local/data/systemfile/filesystem/项目安装包/wms-db/'
+
+log:
+  #日志等级 数字越小等级越高，四个等级 1 2 3 4
+  level: 2
+
+#库位调度相关
+#storagescheduling:
+#  #入库规则配置  格式  规则key = 层（范围，排序顺序），列（范围，排序顺序），排（范围，排序顺序），深（范围，排序顺序），
+#  #可配置多个规则，规则与规则之间通过冒号（英文）分割。 default为默认规则
+#  #层 列 排 深 之间用逗号隔开，一个规则中必须配这四项，
+#  #每项里面包含两个内容，即范围和排序顺序，范围是指该规则下只能包含配置的数据，如默认规则中第一项 1-2-3-4表示只能选用1，2，3，4层，其他层不可用，
+#  #范围可以区间表示，区间用三个点表示，如默认规则中 第二项2...8表示可以用第2列到第8列，注意区间用的闭区间，即包含端点两个值，
+#  #范围的数值需按顺序排列，即默认规则第一项中只能配置1-2-3-4，不能配置成2-1-4-3，区间也是
+#  #排序顺序，范围与排序顺序中间用#分割，排序顺序可以省略（#不可省略），省略表示顺序排序，如默认规则中第一项按1，2，3，4的顺序排序，
+#  #排序顺序若没有省略，则按中指排序，如默认规则中第二项的排序规则为优先第3列，第三列之后选择离第三列近的列，即 3 ， 2，4，1，5的顺序
+#  #范围和排序若只写一个值，则表示范围不加限制，包含全部，值用来排序，不可全部省略
+#  inwarerules: 'default=1-2-3-4#,2...8#3,3,4:变温库03=2,3,4,5'
+#  # 每层最小货位数
+#  layerminstorage: 4
+#    # 每层最小货位数
+#  in-order-auto-finish: true
+#storage:
+#  #分拣区
+#  sortdistid : 54106405617664
+#  #暂存区
+#  cachedistid : 54106405617664
+#  #出库口
+#  outdoors: 1,2,3
+job:
+  passwd: suray2020
+
+#stock:
+#  primarykey:
+#    - materialId
+#    - stockBatch
+db:
+  types:
+    - MYSQL
+    - MSSQL
+  type: MYSQL
+
+  mysql:
+    url: jdbc:mysql://192.168.1.106:3306/wms?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 'suray2020.'
+  mssql:
+    url: jdbc:sqlserver://192.168.58.53:1433;DatabaseName=wms3.0
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: sa
+    password: suray2020.
+
+wms:
+  core:
+    stock-keys:
+      - halou1
+      - halou2
+      - halou3
+      - halou4
+  task:
+    scheduling:
+      # 需要指定 库区不指定默认为1 如 01-001=1
+      car:
+        01-001: 2
+        01-002: 3
+      default-out-door: 01-002
+      priority-in-door: true
+      priority-row: true
+      cache-open: false
+  comparator:
+    # 删除value-1
+      # 退货先出 （没有退货不配置）
+    is-return: 1
+    # 先进先出 （入库单单据日期）
+    in-date: 2
+    # 批次小先出
+    stock-batch: 3
+    # 取样先出
+    is-sample: 4
+    # 零头先出 （数量最小的托盘先出）
+    amount: 5
+    effective-date: 6
+    layer: 7
+    row: 8
+    list: 9
+
+
+  monitor:
+    task:
+      no-issue: 5
+      no-finish: 12
+    pallet:
+      start-in: 10
+      check-in: 2
+      sort-in: 2
+
+
+
+desc:
+  user: 用户相关
+  singlesignon: 单点登陆开关
+  defaultpasswd: 用户默认密码
+  outorder: 出库单相关
+  mergehours: 出库单合并时间，单位小时
+  document: 文档相关
+  path: 文档根路径
+  log: 系统操作日志
+  level: 日志等级 数字越小等级越高，四个等级 1 2 3 4
+  desc: 配置文件的注释
+  storagescheduling: 库位调度相关
+  inwarerules: 入库规则
+  passwd: 定时服务密码
+
+
+
